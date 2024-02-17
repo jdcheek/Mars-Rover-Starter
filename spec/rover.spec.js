@@ -41,5 +41,29 @@ describe("Rover class", function() {
       ]
     })
   });
+
+  test("responds correctly to the mode change command", function() {
+    let cmd = [new Command('MODE_CHANGE', 'LOW_POWER')]
+    let msg = new Message('Mode check', cmd)
+    let rov = new Rover(98382)
+    let res = rov.receiveMessage(msg)
+    expect(res.results[0].completed).toBe(true)
+  });
+
+  test("responds with a false completed value when attempting to move in LOW_POWER mode", function() {
+    let cmd = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('MOVE', 1999)]
+    let msg = new Message('Mode check', cmd)
+    let rov = new Rover(98382)
+    let res = rov.receiveMessage(msg)
+    expect(res.results[1].completed).toBe(false)
+  });
+
+  test("responds with the position for the move command", function() {
+    let cmd = [new Command('MOVE', 1999), new Command('STATUS_CHECK')]
+    let msg = new Message('Mode check', cmd)
+    let rov = new Rover(98382)
+    let res = rov.receiveMessage(msg)
+    expect(res.results[1].roverStatus.position).toBe(1999)
+  });
 });
 

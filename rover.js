@@ -31,7 +31,11 @@ class Rover {
       } else if (cmd.commandType === 'MOVE') {
         if (roverStatus.mode === 'LOW_POWER') {
           // do not allow movement
+          response.results.push({
+            completed: false
+          })
         } else {
+          roverStatus.position = cmd.value
           response.results.push({
             completed: true
           })
